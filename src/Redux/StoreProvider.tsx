@@ -11,19 +11,22 @@ import {
   Dispatch,
   ProviderProps,
   Reducer,
+  useMemo,
 } from "react";
 
 import { isEqual } from "../Utils/Utils";
-import { IAction, ISelector, IState, ThunkCb } from "./Models";
+import { IAction, ISelector, IState, IStoreCtx, ThunkCb } from "./Models";
 
 import { ThemeReducer } from "./Reducers";
 
-const AppState: IState = {
+const appState: IState = {
   currentTheme: "mood",
   sayHello: "Hello World",
 };
 
-export const RootReducer = function <T extends Reducer<any, any>[]>(...fns: T) {
+export const ComposeRootReducer = function <T extends Reducer<any, any>[]>(
+  ...fns: T
+) {
   const args = Array.prototype.slice.call(arguments);
   return (s: IState, a: IAction): IState => {
     return fns.reduce((acc: IState, el: Reducer<IState, IAction>) => {
@@ -31,49 +34,53 @@ export const RootReducer = function <T extends Reducer<any, any>[]>(...fns: T) {
     }, s);
   };
 };
-export const Store = createContext([AppState]);
+
+export const Store = createContext<IStoreCtx>({
+  state: appState,
+  dispatch: (a: IAction) => void 0,
+});
+
+const RootReducer = ComposeRootReducer(ThemeReducer);
 
 export const StoreProvider = (props: any) => {
-  const [state, dispatch] = useReducer(RootReducer(ThemeReducer), AppState);
-
-  return (
-    <Store.Provider value={[state, dispatch] as any}>
-      {props.children}
-    </Store.Provider>
+  const [state, dispatch] = useReducer(RootReducer, appState);
+  return useMemo(
+    () => (
+      <Store.Provider value={{ state, dispatch }}>
+        {props.children}
+      </Store.Provider>
+    ),
+    [state]
   );
 };
 
 export const useDispatch = () => {
   // experemental implementation
-  const [state, dispatch] = useContext<any>(Store);
-  const thunk = useCallback(
-    (arg: IAction | ThunkCb): void => {
-      if (typeof arg === "function") {
-        arg.apply(null, [dispatch as Dispatch<IAction>, () => state]);
-      } else {
-        dispatch(arg);
-      }
-    },
-    [state]
-  );
+  const { state, dispatch } = useContext<IStoreCtx>(Store);
+  const thunk = (arg: IAction | ThunkCb): void => {
+    if (typeof arg === "function") {
+      arg.apply(null, [dispatch as Dispatch<IAction>, () => state]);
+    } else {
+      dispatch(arg);
+    }
+  };
   return thunk;
 };
 
-export const useSelector = (selector: ISelector): any => {
+export const useSelector = (selector: ISelector): Partial<IState> => {
   // experemental implementation
-
-  const ref = useRef(1);
-  const [state, dispatch] = useContext<any>(Store);
-
+  const { state } = useContext<IStoreCtx>(Store);
   const newState = selector(state);
-  const [passState, setPassState] = useState(newState);
+  const [passState, setPassState] = useSmartState(newState);
+  return useMemo(() => newState, [newState]);
+};
 
-  if (!isEqual(passState, newState)) {
-    ref.current++;
+export const useSmartState = <T,>(defState: T): [T, (newState: T) => void] => {
+  const [state, setState] = useState(defState);
+  function smartSetState(newState: typeof defState) {
+    if (!isEqual(state, newState)) {
+      setState(newState);
+    }
   }
-  useEffect(() => {
-    setPassState(newState);
-  }, [ref.current]);
-
-  return passState;
+  return [state, smartSetState];
 };

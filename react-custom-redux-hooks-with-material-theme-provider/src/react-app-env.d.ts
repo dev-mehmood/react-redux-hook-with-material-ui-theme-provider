@@ -2,8 +2,8 @@
 /// <reference types="react-scripts" />
 import * as createPalette from "@material-ui/core/styles/createPalette";
 import { ThemeOptions, Theme } from "@material-ui/core/styles";
-interface IExtras<T> {
-  [key: string]: T;
+interface IExtras {
+  footerBgColor: string;
 }
 declare module "@material-ui/core/styles/createPalette" {
   export interface PaletteOptions {

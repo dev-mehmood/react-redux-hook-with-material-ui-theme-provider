@@ -1,20 +1,14 @@
-import React from "react";
-
 import { createStyles, makeStyles, Theme } from "@material-ui/core/styles";
-
-import { ThemeChanger } from "./Theme/ThemeProvider";
-import { StoreProvider, useSelector } from "./Redux/StoreProvider";
 import Header from "./components/Header";
 import Box from "@material-ui/core/Box";
 import Typography from "@material-ui/core/Typography";
-import { IState } from "./Redux/Models";
-import useTheme from "@material-ui/core/styles/useTheme";
+import { useSelector } from "./Redux/StoreProvider";
 
-const useStyles = makeStyles((theme: Theme) =>
+const useAppStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       flexGrow: 1,
-      background: theme.palette.primary.dark,
+      background: theme.palette.primary.light,
       minHeight: "100vh",
     },
   })
@@ -22,27 +16,25 @@ const useStyles = makeStyles((theme: Theme) =>
 
 function App() {
   // using state from store
+  const classes = useAppStyles();
   const sayHello = useSelector((state) => state.sayHello);
 
   return (
-    <StoreProvider>
-      <ThemeChanger>
-        <Box>
-          <Header />
-
-          <Box
-            minHeight="calc( 100vh - 64px )"
-            display="flex"
-            alignItems="center"
-            justifyContent="center"
-          >
-            <Typography variant="h4" color="secondary">
-              {sayHello}
-            </Typography>
-          </Box>
+    <div className={classes.root}>
+      <Box>
+        <Header />
+        <Box
+          minHeight="calc( 100vh - 64px )"
+          display="flex"
+          alignItems="center"
+          justifyContent="center"
+        >
+          <Typography variant="h4" color="secondary">
+            {sayHello}
+          </Typography>
         </Box>
-      </ThemeChanger>
-    </StoreProvider>
+      </Box>
+    </div>
   );
 }
 

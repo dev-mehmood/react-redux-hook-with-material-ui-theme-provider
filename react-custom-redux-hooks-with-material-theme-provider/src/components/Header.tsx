@@ -31,7 +31,7 @@ function Header() {
 
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="primary">
+      <AppBar position="static">
         <Toolbar>
           <IconButton
             edge="start"
@@ -47,9 +47,8 @@ function Header() {
           <Button
             variant="contained"
             color="secondary"
-            onClick={(event) => {
-              event.preventDefault();
-              dispatch(changeThemeThunk(undefined));
+            onClick={() => {
+              dispatch(changeThemeThunk(""));
             }}
           >
             Change Theme

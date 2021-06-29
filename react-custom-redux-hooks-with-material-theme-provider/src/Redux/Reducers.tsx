@@ -6,15 +6,13 @@ const ThemeReducer = (
 ) => {
   switch (type) {
     case "CHANGE_THEME":
-      // optimization
-      if (state.currentTheme === payload) return state;
       return { ...state, currentTheme: payload };
     default:
       return state;
   }
 };
 
-const changeThemeThunk: ThunkFn = (payload: any | undefined) => {
+const changeThemeThunk: ThunkFn = (payload: any) => {
   return (dispatch, getState) => {
     // simulation of thunk operation
     var tim = setTimeout(() => {

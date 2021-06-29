@@ -1,9 +1,6 @@
 import { Dispatch } from "react";
 import { useDispatch } from "./StoreProvider";
-export interface IStoreCtx {
-  state: IState;
-  dispatch: Dispatch<IAction>;
-}
+
 export interface IState {
   sayHello: string;
   currentTheme: "passion" | "mood";
