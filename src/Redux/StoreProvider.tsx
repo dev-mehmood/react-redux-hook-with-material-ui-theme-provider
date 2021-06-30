@@ -72,7 +72,8 @@ export const useSelector = (selector: ISelector): Partial<IState> => {
   const { state } = useContext<IStoreCtx>(Store);
   const newState = selector(state);
   const [passState, setPassState] = useSmartState(newState);
-  return useMemo(() => newState, [newState]);
+  setPassState(newState);
+  return useMemo(() => passState, [passState]);
 };
 
 export const useSmartState = <T,>(defState: T): [T, (newState: T) => void] => {

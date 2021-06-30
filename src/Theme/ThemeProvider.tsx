@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useMemo } from "react";
 
 import { ThemeProvider } from "@material-ui/core/styles";
 import { createMuiTheme, responsiveFontSizes } from "@material-ui/core/styles";
@@ -38,25 +38,23 @@ const ThemeChanger = (props: any) => {
   const currentTheme = useSelector((state) => {
     return state.currentTheme;
   });
-  const [activeTheme, setActiveTheme] = useState(mood);
 
-  useEffect(() => {
+  return useMemo(() => {
+    let activeTheme = mood;
     switch (currentTheme) {
       case "mood":
-        setActiveTheme(mood);
+        activeTheme = mood;
         console.log("mood theme selected");
         break;
       case "passion":
-        setActiveTheme(passion);
+        activeTheme = passion;
         break;
 
       default:
-        setActiveTheme(mood);
+        activeTheme = mood;
         console.log("mood theme selected");
         break;
     }
-  }, [currentTheme]);
-  return useMemo(() => {
     return <ThemeProvider theme={activeTheme}>{props.children}</ThemeProvider>;
   }, [currentTheme]);
 };
