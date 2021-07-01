@@ -27,7 +27,6 @@ const appState: IState = {
 export const ComposeRootReducer = function <T extends Reducer<any, any>[]>(
   ...fns: T
 ) {
-  const args = Array.prototype.slice.call(arguments);
   return (s: IState, a: IAction): IState => {
     return fns.reduce((acc: IState, el: Reducer<IState, IAction>) => {
       return (acc = el(acc, a));
