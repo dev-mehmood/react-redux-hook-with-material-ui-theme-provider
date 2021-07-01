@@ -21,7 +21,7 @@ In tsconfig.json add
 
 ### Redux:
 
-## 1- create initial starting data statuses
+## 1- Create initial starting data statuses
 
 ```typescript
 const appState: IState = {
@@ -30,7 +30,7 @@ const appState: IState = {
 };
 ```
 
-## 2- create context with data
+## 2- Create context with data
 
 ```typescript
 export const Store = createContext<IStoreCtx>({
@@ -39,9 +39,9 @@ export const Store = createContext<IStoreCtx>({
 });
 ```
 
-## 3- create provider React component
+## 3- Create provider React component
 
-    use RootReducer from step number (8)
+    Use RootReducer from step number (8)
     pay attention as how to use "useReducer hook"
 
 ```typescript
@@ -59,7 +59,7 @@ export const StoreProvider = (props: any) => {
 };
 ```
 
-## 4- warp you app component in storeprovider in index.js
+## 4- Warp you app component in storeprovider in index.js
 
 ```typescript
 ReactDOM.render(
@@ -74,7 +74,7 @@ ReactDOM.render(
 );
 ```
 
-## 5- wirte Reducers to change the state
+## 5- Wirte Reducers to change the state
 
 ```typescript
 const ThemeReducer = (
@@ -110,7 +110,7 @@ const changeThemeThunk: ThunkFn = (payload: any | undefined) => {
 };
 ```
 
-## 8- make a Root reducer
+## 8- Make a Root reducer
 
 ```typescript
 export const ComposeRootReducer = function <T extends Reducer<any, any>[]>(
@@ -125,9 +125,12 @@ export const ComposeRootReducer = function <T extends Reducer<any, any>[]>(
 };
 ```
 
-const RootReducer = ComposeRootReducer(ThemeReducer); <-------- pass it to useReducer in step(3)
+```typescript
+const RootReducer = ComposeRootReducer(ThemeReducer); <--------
+Pass it to useReducer in step(3)
+```
 
-## 7- to change data and pass data to store you can use thunkfn or reducer by using
+## 7- To change data and pass data to store you can use thunkfn or reducer by using
 
     useDispatch hook
 
@@ -168,9 +171,9 @@ function Header() {
 }
 ```
 
-## 8- getting data inside a component ; this useSelector hook will only call when
+## 8- Getting data inside a component ; this useSelector hook will only call when
 
-returned state is changed from previous
+Returned state is changed from previous
 
 ```typescript
 fuction App() {
