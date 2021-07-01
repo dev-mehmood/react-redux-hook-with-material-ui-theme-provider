@@ -1,54 +1,25 @@
-# Getting Started with Create React App
+Redux:
+1- create initial starting data statuses
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-
-## Add Material-ui
-
-$ yarn add @material-ui/core @material-ui/icon
-
-## For custom typings
-
-In tsconfig.json add
-
-```json
-{
-  "compilerOptions": {
-    // ...
-    "typeRoots": ["node_modules/@types", "./src/react-app-env.d.ts"]
-  },
-  "include": ["src"]
-}
-alert(s);
-```
-
-### Redux:
-
-## 1- create initial starting data statuses
-
-```typescript
 const appState: IState = {
-  currentTheme: "mood",
-  sayHello: "Hello World",
+    currentTheme: "mood",
+    sayHello: "Hello World",
 };
-```
 
-## 2- create context with data
 
-```typescript
+2- create context with data
+
 export const Store = createContext<IStoreCtx>({
   state: appState,
   dispatch: (a: IAction) => void 0,
 });
-```
 
-## 3- create provider React component
-
+3- create provider React component
     use RootReducer from step number (8)
     pay attention as how to use "useReducer hook"
 
-```typescript
 export const StoreProvider = (props: any) => {
-
+    
   const [state, dispatch] = useReducer(RootReducer, appState);  <----RootReducer from step (8)
   return useMemo(
     () => (
@@ -59,11 +30,9 @@ export const StoreProvider = (props: any) => {
     [state]
   );
 };
-```
 
-## 4- warp you app component in storeprovider in index.js
+4- warp you app component in storeprovider in index.js
 
-```typescript
 ReactDOM.render(
   // <React.StrictMode>
   <StoreProvider>
@@ -74,11 +43,9 @@ ReactDOM.render(
   // </React.StrictMode>
   document.getElementById("root")
 );
-```
 
-## 5- wirte Reducers to change the state
+5- wirte Reducers to change the state
 
-```typescript
 const ThemeReducer = (
   state: IState,
   { type, payload }: { type: string; payload: any }
@@ -92,11 +59,9 @@ const ThemeReducer = (
       return state;
   }
 };
-```
 
-## 6- You can write thunk function for asynchronous api call
+6- You can write thunk function for asynchronous api call
 
-```typescript
 const changeThemeThunk: ThunkFn = (payload: any | undefined) => {
   return (dispatch, getState) => {
     // simulation of thunk operation
@@ -110,11 +75,10 @@ const changeThemeThunk: ThunkFn = (payload: any | undefined) => {
     }, 200);
   };
 };
-```
 
-## 8- make a Root reducer
 
-```typescript
+8- make a Root reducer 
+
 export const ComposeRootReducer = function <T extends Reducer<any, any>[]>(
   ...fns: T
 ) {
@@ -125,15 +89,13 @@ export const ComposeRootReducer = function <T extends Reducer<any, any>[]>(
     }, s);
   };
 };
-```
 
 const RootReducer = ComposeRootReducer(ThemeReducer); <-------- pass it to useReducer in step(3)
 
-## 7- to change data and pass data to store you can use thunkfn or reducer by using
 
-    useDispatch hook
+7- to change data and pass data to store you can use thunkfn or reducer by using
+    useDispatch hook 
 
-```typescript
 function Header() {
   ...
   const dispatch = useDispatch();  <-----------
@@ -168,13 +130,10 @@ function Header() {
     </div>
   );
 }
-```
 
-## 8- getting data inside a component ; this useSelector hook will only call when
-
+8- getting data inside a component ; this useSelector hook will only call when 
 returned state is changed from previous
 
-```typescript
 fuction App() {
   // using state from store
   const sayHello = useSelector((state) => state.sayHello);
@@ -186,8 +145,7 @@ fuction App() {
             {sayHello}
           </Typography>
     ....
-
+    
     </div>
   );
 }
-```
